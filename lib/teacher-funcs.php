@@ -10,19 +10,25 @@ function connect_teacher()
 function auth_teacher()
 {
     session_start();
-    $teacher_id = $_SESSION['teacher_id'];
-    if (empty($teacher_id)) {
-        throw new Exception("请先登录", 1);
+    if ($_SESSION['role_type'] != 1) {
+        throw new Exception('您不是教师', 11);
     }
-    return $teacher_id;
 }
 
 function auth_admin()
 {
     session_start();
-    $admin_id = $_SESSION['admin_id'];
-    if (empty($admin_id)) {
-        throw new Exception("非管理员", 1);
+    if ($_SESSION['role_type'] != 2) {
+        throw new Exception('您不是管理员', 12);
     }
-    return $admin_id;
+}
+
+function auth_login()
+{
+    session_start();
+    $username = $_SESSION['username'];
+    if (empty($username)) {
+        throw new Exception('您尚未登陆', 10);
+    }
+    return $username;
 }
