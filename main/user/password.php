@@ -6,9 +6,9 @@ $user = json_input();
 json_header();
 
 try {
-    $db = connect_teacher();
-
     $username = auth_login();
+
+    $db = connect_teacher();
 
     $new_password = $user['password'];
     if ($new_password != $user['verify']) {
