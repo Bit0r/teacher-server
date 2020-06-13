@@ -6,7 +6,7 @@ $user = json_input();
 json_header();
 
 try {
-    $username = auth_login();
+    $username = auth(ROLE_ADMIN | ROLE_TEACHER);
 
     $db = connect_teacher();
 

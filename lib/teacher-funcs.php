@@ -6,29 +6,15 @@ function connect_teacher()
     return pdo_connect('teacher', 'teacher', '%3e8Um0_');
 }
 
+# 定义关于角色的常量
+const ROLE_TEACHER = 0b1;
+const ROLE_ADMIN = 0b10;
 
-function auth_teacher()
+function auth(int $role_type)
 {
     session_start();
-    if ($_SESSION['role_type'] != 1) {
-        throw new Exception('您不是教师', 11);
+    if ($_SESSION['role_type'] != $role_type) {
+        throw new Exception('无权访问本资源', 1);
     }
-}
-
-function auth_admin()
-{
-    session_start();
-    if ($_SESSION['role_type'] != 2) {
-        throw new Exception('您不是管理员', 12);
-    }
-}
-
-function auth_login()
-{
-    session_start();
-    $username = $_SESSION['username'];
-    if (empty($username)) {
-        throw new Exception('您尚未登陆', 10);
-    }
-    return $username;
+    return $_SESSION['username'];
 }
