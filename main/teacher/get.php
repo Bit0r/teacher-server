@@ -15,10 +15,11 @@ try {
     $db = connect_teacher();
 
     $query =
-        "SELECT *
+        'SELECT *
         FROM teacher
-        WHERE teacher_id = '$teacher_id'";
-    $stmt = $db->query($query);
+        WHERE teacher_id = ?';
+    $stmt = $db->prepare($query);
+    $stmt->execute([$teacher_id]);
 
     $response = create_response();
     $response['message'] = $stmt->fetch();

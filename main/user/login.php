@@ -23,12 +23,11 @@ try {
         throw new Exception("密码错误", 2);
     }
 
-    # 将登陆信息写入会话
-    session_start();
-    $_SESSION['role_type'] = $result['role_type'];
-    $_SESSION['username'] = $user['username'];
-
+    # 将登陆信息写入会话同时响应身份
     $response = create_response();
+    session_start();
+    $_SESSION['role_type'] = $response['message'] = $result['role_type'];
+    $_SESSION['username'] = $user['username'];
 } catch (\PDOException $th) {
     $response = create_response($th);
 } catch (Exception $th) {
