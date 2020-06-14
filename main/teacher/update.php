@@ -14,8 +14,8 @@ try {
 
     # 构造查询语句和参数
     $query = 'UPDATE teacher SET';
-    if (isset($teacher['teacher_id_new'])) {
-        $teacher_id_new = $teacher['teacher_id_new'];
+    $teacher_id_new = $teacher['teacher_id_new'];
+    if (!empty($teacher_id_new) && $teacher_id_new != $teacher_id) {
         unset($teacher['teacher_id_new']);
         $query .= ' teacher_id = ?,';
         $params[] = $teacher_id_new;
