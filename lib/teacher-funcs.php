@@ -19,3 +19,10 @@ function auth(int $role_type)
     }
     return $_SESSION['username'];
 }
+
+function teacher_id_check(string $teacher_id)
+{
+    if (preg_match('/^[12]\d{8}[1-7][0-2]\d{6}$/', $teacher_id) !== 1) {
+        throw new Exception('教师ID不合法', 12);
+    }
+}

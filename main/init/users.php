@@ -11,15 +11,13 @@ try {
         FROM teacher';
     $stmt_teacher = $db->query($query);
 
-    $markers = create_markers(3);
-    $query = "INSERT users VALUES $markers";
+    $query = "INSERT users VALUES (?, ?, 1)";
     $stmt_users = $db->prepare($query);
 
     while ($teacher_id = $stmt_teacher->fetchColumn()) {
         $stmt_users->execute([
             $teacher_id,
-            password_hash(mb_substr($teacher_id, -6), PASSWORD_DEFAULT),
-            1
+            password_hash(mb_substr($teacher_id, -6), PASSWORD_DEFAULT)
         ]);
     }
 

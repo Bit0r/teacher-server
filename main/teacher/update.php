@@ -10,11 +10,13 @@ try {
     $db = connect_teacher();
 
     $teacher_id = $teacher['teacher_id'];
+    teacher_id_check($teacher_id);
 
     # 构造查询语句和参数
     $query = 'UPDATE teacher SET';
     $teacher_id_new = $teacher['teacher_id_new'];
     if (!empty($teacher_id_new) && $teacher_id_new != $teacher_id) {
+        teacher_id_check($teacher_id_new);
         $query .= ' teacher_id = ?,';
         $params[] = $teacher_id_new;
     }

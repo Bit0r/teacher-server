@@ -7,12 +7,15 @@ json_header();
 
 try {
     auth(ROLE_ADMIN);
+
+    teacher_id_check($teacher['teacher_id']);
+
     $db = connect_teacher();
+    $db->beginTransaction();
 
     $markers = create_markers(5);
     $query = "INSERT INTO teacher(teacher_id,teacher_name,gender,title,salary) VALUES $markers";
 
-    #执行查询
     $stmt = $db->prepare($query);
     $stmt->execute([
         $teacher['teacher_id'],
@@ -22,6 +25,17 @@ try {
         $teacher['salary']
     ]);
 
+    $query =
+        'INSERT INTO users(username, password_hash, role_type) VALUES
+        (?, ?, 1)';
+
+    $stmt = $db->prepare($query);
+    $stmt->execute([
+        $teacher['teacher_id'],
+        password_hash(mb_substr($teacher['teacher_id'], -6), PASSWORD_DEFAULT)
+    ]);
+
+    $db->commit();
     $response = create_response();
 } catch (\PDOException $th) {
     $response = create_response($th);
