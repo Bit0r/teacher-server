@@ -7,8 +7,8 @@ function connect_teacher()
 }
 
 # 定义关于角色的常量
-const ROLE_TEACHER = 0b1;
-const ROLE_ADMIN = 0b10;
+const ROLE_TEACHER = 1 << 0;
+const ROLE_ADMIN = 1 << 1;
 
 function auth(int $role_type)
 {

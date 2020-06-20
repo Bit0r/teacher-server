@@ -9,26 +9,20 @@ try {
     auth(ROLE_ADMIN);
     $db = connect_teacher();
 
-    $teacher_id = $teacher['teacher_id'];
-    teacher_id_check($teacher_id);
+    # 检查新id合法性
+    teacher_id_check($teacher['teacher_id']);
 
     # 构造查询语句和参数
     $query = 'UPDATE teacher SET';
-    $teacher_id_new = $teacher['teacher_id_new'];
-    if (!empty($teacher_id_new) && $teacher_id_new != $teacher_id) {
-        teacher_id_check($teacher_id_new);
-        $query .= ' teacher_id = ?,';
-        $params[] = $teacher_id_new;
-    }
-
-    unset($teacher['teacher_id'], $teacher['teacher_id_new']);
+    $teacher_id_old = $teacher['teacher_id_old'];
+    unset($teacher['teacher_id_old']);
     foreach ($teacher as $key => $value) {
         $query .= " $key = ?,";
         $params[] = $value;
     }
 
     $query = mb_substr($query, 0, mb_strlen($query) - 1) . ' WHERE teacher_id = ?';
-    $params[] = $teacher_id;
+    $params[] = $teacher_id_old;
 
     #执行查询
     $stmt = $db->prepare($query);
