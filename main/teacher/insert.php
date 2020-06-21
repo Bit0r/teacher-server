@@ -13,6 +13,7 @@ try {
     $db = connect_teacher();
     $db->beginTransaction();
 
+    #插入教师信息
     $markers = create_markers(5);
     $query = "INSERT INTO teacher(teacher_id,teacher_name,gender,title,salary) VALUES $markers";
 
@@ -25,6 +26,7 @@ try {
         $teacher['salary']
     ]);
 
+    #添加用户
     $query =
         'INSERT INTO users(username, password_hash, role_type) VALUES
         (?, ?, 1)';

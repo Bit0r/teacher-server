@@ -7,10 +7,15 @@ json_header();
 
 try {
     auth(ROLE_ADMIN);
-    $db = connect_teacher();
 
     # 检查新id合法性
-    teacher_id_check($teacher['teacher_id']);
+    $teacher_id = $teacher['teacher_id'];
+    if (!empty($teacher_id)) {
+        teacher_id_check($teacher_id);
+    }
+
+    $db = connect_teacher();
+    $db->beginTransaction();
 
     # 构造查询语句和参数
     $query = 'UPDATE teacher SET';
@@ -28,6 +33,24 @@ try {
     $stmt = $db->prepare($query);
     $stmt->execute($params);
 
+
+    # 修改登陆用户名和密码
+    if (!empty($teacher_id)) {
+        $query =
+            'UPDATE users
+            SET
+                username = ?,
+                password_hash = ?
+            WHERE username = ?';
+        $stmt = $db->prepare($query);
+        $stmt->execute([
+            $teacher_id,
+            password_hash($teacher_id, PASSWORD_DEFAULT),
+            $teacher_id_old
+        ]);
+    }
+
+    $db->commit();
     $response = create_response();
 } catch (\PDOException $th) {
     $response = create_response($th);
