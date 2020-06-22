@@ -1,5 +1,6 @@
 <?php
 require_once '../../lib/common.php';
+require_once '../../recaptcha/autoload.php';
 
 function connect_teacher()
 {
@@ -24,5 +25,14 @@ function teacher_id_check(string $teacher_id)
 {
     if (preg_match('/^[12]\d{8}[1-7][0-2]\d{6}$/', $teacher_id) !== 1) {
         throw new Exception('教师ID不合法', 12);
+    }
+}
+
+function recaptcha_check($recaptchaResponse)
+{
+    $recaptcha = new \ReCaptcha\ReCaptcha('6Lc5jKcZAAAAACKZQDkHygiwO04ctW7m8SLMEwhv');
+    $response = $recaptcha->verify($recaptchaResponse);
+    if (!$response->isSuccess()) {
+        throw new Exception('机器人验证出错', 41);
     }
 }

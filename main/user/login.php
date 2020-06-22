@@ -6,6 +6,8 @@ $user = json_input();
 json_header();
 
 try {
+    recaptcha_check($user['recaptcha']);
+
     $db = connect_teacher();
 
     $query =
