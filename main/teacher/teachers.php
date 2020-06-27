@@ -11,10 +11,26 @@ try {
     $db = connect_teacher();
     $query =
         'SELECT *
-        FROM teacher
-        LIMIT ?, ?';
+        FROM teacher';
+    $params = [];
+
+    $keyword = $page['keyword'];
+    if (!empty($keyword)) {
+        if (teacher_id_format($keyword)) {
+            $query .= ' WHERE teacher_id = ?';
+            $params[] = $keyword;
+        } else {
+            $query .= ' WHERE teacher_name LIKE ?';
+            $params[] = "%$keyword%";
+        }
+    }
+
+    $query .= ' LIMIT ? , ?';
+    $params[] = $page['offset'];
+    $params[] = $page['row_count'];
+
     $stmt = $db->prepare($query);
-    $stmt->execute([$page['offset'], $page['row_count']]);
+    $stmt->execute($params);
 
     $response = create_response();
     $response['message'] = $stmt->fetchAll();

@@ -3,6 +3,8 @@ require_once '../../lib/teacher-funcs.php';
 
 json_header();
 
+$keyword = $_GET['keyword'];
+
 try {
     auth(ROLE_ADMIN);
     $db = connect_teacher();
@@ -11,9 +13,23 @@ try {
     $query =
         'SELECT COUNT(*)
         FROM teacher';
+    $params = [];
+
+    if (!empty($keyword)) {
+        if (teacher_id_format($keyword)) {
+            $query .= ' WHERE teacher_id = ?';
+            $params[] = $keyword;
+        } else {
+            $query .= ' WHERE teacher_name LIKE ?';
+            $params[] = "%$keyword%";
+        }
+    }
+
+    $stmt = $db->prepare($query);
+    $stmt->execute($params);
 
     $response = create_response();
-    $response['message'] = $db->query($query)->fetchColumn();
+    $response['message'] = $stmt->fetchColumn();
 } catch (\PDOException $th) {
     $response = create_response($th);
 } catch (Exception $th) {

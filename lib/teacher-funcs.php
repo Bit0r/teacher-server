@@ -23,9 +23,14 @@ function auth(int $role_type)
 
 function teacher_id_check(string $teacher_id)
 {
-    if (preg_match('/^[12]\d{8}[1-7][0-2]\d{6}$/', $teacher_id) !== 1) {
+    if (!teacher_id_format($teacher_id)) {
         throw new Exception('教师ID不合法', 12);
     }
+}
+
+function teacher_id_format(string $teacher_id)
+{
+    return preg_match('/^[12]\d{8}[1-7][0-2]\d{6}$/', $teacher_id) === 1;
 }
 
 function recaptcha_check($recaptchaResponse)

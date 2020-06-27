@@ -11,13 +11,7 @@ try {
     $db = connect_teacher();
     $query =
         'SELECT
-            id,
-            course_name,
-            class_name,
-            teacher_id,
-            teacher_name,
-            course_year,
-            semester
+            teacher_course.*, teacher_name
         FROM
             teacher_course
                 JOIN
