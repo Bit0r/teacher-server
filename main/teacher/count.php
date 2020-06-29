@@ -12,15 +12,16 @@ try {
     # 构造查询语句
     $query =
         'SELECT COUNT(*)
-        FROM teacher';
+        FROM teacher
+        WHERE departure_time IS NULL';
     $params = [];
 
     if (!empty($keyword)) {
         if (teacher_id_format($keyword)) {
-            $query .= ' WHERE teacher_id = ?';
+            $query .= ' AND teacher_id = ?';
             $params[] = $keyword;
         } else {
-            $query .= ' WHERE teacher_name LIKE ?';
+            $query .= ' AND teacher_name LIKE ?';
             $params[] = "%$keyword%";
         }
     }
