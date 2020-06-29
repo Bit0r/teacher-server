@@ -10,9 +10,12 @@ try {
 
     $db = connect_teacher();
     $query =
-        'SELECT *
-        FROM teacher
-        WHERE departure_time IS NULL';
+        'SELECT
+            teacher_id, teacher_name, title, salary, gender
+        FROM
+            teacher
+        WHERE
+            departure_time IS NULL';
     $params = [];
 
     $keyword = $page['keyword'];
