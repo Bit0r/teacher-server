@@ -6,10 +6,10 @@ json_header();
 try {
     session_start();
     switch ($_SESSION['role_type']) {
-        case ROLE_TEACHER:
+        case ROLE_ADMIN:
             $where = '';
             break;
-        case ROLE_ADMIN:
+        case ROLE_TEACHER:
             $where = ' WHERE teacher_id = \'' . $_SESSION['username'] . '\'';
             break;
         default:
